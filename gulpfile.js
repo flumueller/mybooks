@@ -1,29 +1,40 @@
 var gulp = require('gulp');
 var pug = require('gulp-pug');
 var sass = require('gulp-sass');
+var browserify = require('gulp-browserify');
+var concat = require('gulp-concat');
 var path = require('path'); 
 
 var paths = {  
-  sass: ['./comp/sass/*.scss'],
-  pug: ['./comp/pug/*.pug']
+  sass: ['./www/dev/css/*.scss'],
+  pug: ['./www/dev/*.pug'],
+  js: ['./www/dev/js/*.js']
 };    
 
-gulp.task('default', ['sass', 'pug', 'watch']);  
+gulp.task('default', ['sass', 'pug', 'js', 'watch']);  
 
 gulp.task('sass', function () {
-  return gulp.src('./comp/sass/*.scss')
+  return gulp.src(paths.sass)
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-    .pipe(gulp.dest('./builds/dev/css'));
+    .pipe(gulp.dest('./www/prod/css'));
 });
 
 gulp.task('pug', function(done) {  
-  gulp.src('./comp/pug/*.pug')
+  gulp.src(paths.pug)
     .pipe(pug())
-    .pipe(gulp.dest('./builds/dev/'))
+    .pipe(gulp.dest('./www/prod/'))
     .on('end', done);
+});
+
+gulp.task('js', function() {  
+  gulp.src(paths.js)
+    .pipe(concat('scripts.js'))
+    .pipe(browserify())
+    .pipe(gulp.dest('./www/prod/js'));
 });
 
 gulp.task('watch', function() {  
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.pug, ['pug']);
+  gulp.watch(paths.js, ['js']);
 });
