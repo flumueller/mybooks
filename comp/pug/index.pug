@@ -1,0 +1,23 @@
+doctype html
+html(lang='en')
+  head
+    title myBooks Library
+    link(rel='stylesheet', type='text/css', href='css/style.css')
+  body
+    // Main navigation
+    nav
+      .center
+        a.logo(href='') myBooks
+        ul
+          li: a.active(href='#') Start
+          li: a(href='#') Library
+          li: a(href='#') My Account
+    .center
+      h1 myBooks Library
+      // Book seach form
+      form.bookSearch(action='index.html', method='get')
+        input(type='text', name='name', placeholder='Book title, IBAN, Author…')
+        input(type='submit', value='Search')
+      .teaser Box 1
+      .teaser Box 2
+      .teaser Box 3
