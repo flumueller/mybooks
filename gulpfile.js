@@ -1,9 +1,10 @@
-var gulp = require('gulp');
-var pug = require('gulp-pug');
-var sass = require('gulp-sass');
-var browserify = require('gulp-browserify');
-var concat = require('gulp-concat');
-var path = require('path'); 
+var gulp = require('gulp'),
+    pug = require('gulp-pug'),
+    sass = require('gulp-sass'),
+    browserify = require('gulp-browserify'),
+    concat = require('gulp-concat'),
+    connect = require('gulp-connect'),
+    path = require('path'); 
 
 var paths = {  
   sass: ['./www/dev/css/*.scss'],
@@ -11,12 +12,11 @@ var paths = {
   js: ['./www/dev/js/*.js']
 };    
 
-gulp.task('default', ['sass', 'pug', 'js', 'watch']);  
-
 gulp.task('sass', function () {
   return gulp.src(paths.sass)
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-    .pipe(gulp.dest('./www/prod/css'));
+    .pipe(gulp.dest('./www/prod/css'))
+    .pipe(connect.reload());
 });
 
 gulp.task('pug', function(done) {  
@@ -37,4 +37,13 @@ gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.pug, ['pug']);
   gulp.watch(paths.js, ['js']);
+});
+
+gulp.task('default', ['sass', 'pug', 'js', 'connect','watch']);  
+
+gulp.task('connect', function() {
+  connect.server({
+    root: './www/prod/',
+    livereload: true
+  });
 });
